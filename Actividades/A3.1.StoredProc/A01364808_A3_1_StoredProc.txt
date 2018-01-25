@@ -1,0 +1,36 @@
+Actividad 3 "Procedimientos Almacenados"	Primer Parcial 		Luis Carlos Arias Camacho
+
+
+1)Mostrar un producto por Product Line
+
+delimiter $$
+create procedure show_products(
+    In linea_producto varchar(50))
+BEGIN
+    declare line varchar(50);
+
+    set line = concat(linea_producto, "%");
+    select * from products where productLine like line;
+
+    select linea_producto;
+END $$
+delimiter ;
+
+
+
+
+2)Mostrar la cantidad de clientes cuyo nombre inicia con la letra "n" (n es una variable)
+
+delimiter $$
+create procedure show_customers(
+        In line_name varchar(1))
+BEGIN
+        declare cont int default 0;
+        declare letter varchar(2);
+        set letter = concat(line_name, "%");
+        select count(*) into cont from customers where contactFirstName like letter;
+
+        select line_name;
+        select cont;
+END $$
+delimiter ;
