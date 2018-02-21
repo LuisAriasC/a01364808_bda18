@@ -1,0 +1,48 @@
+----------Consultas sin indices-----------------
+
+--------------INDICES---------------------------
+create index test on orderdetails (orderLineNumber);
+create index test2 on orderdetails (quantityOrdered, orderLineNumber);
+create index test3 on orderdetails (orderLineNumber, quantityOrdered);
+
+-----------Consulta 1---------------------------
+
+explain format=json Select * from orderdetails force index(test) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "95.20"
+
+explain format=json Select * from orderdetails force index(test2) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "93.41"
+
+explain format=json Select * from orderdetails force index(test3) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "8.01"
+
+-----------Consulta 2---------------------------
+
+explain format=json Select productCode from orderdetails force index(test) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "95.20"
+
+explain format=json Select productCode from orderdetails force index(test2) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "27.62"
+
+explain format=json Select productCode from orderdetails force index(test3) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "3.02"
+
+-----------Consulta 3---------------------------
+
+explain format=json Select orderLineNumber, count(*) from orderdetails force index(test) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "95.20"
+
+explain format=json Select orderLineNumber, count(*) from orderdetails force index(test2) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "27.62"
+
+explain format=json Select orderLineNumber, count(*) from orderdetails force index(test3) where orderLineNumber = 1 and quantityOrdered > 50;
+
+"query_cost": "3.02"
