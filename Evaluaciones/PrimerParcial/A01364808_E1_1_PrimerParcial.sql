@@ -43,29 +43,46 @@ DELIMITER;
 
 
 --PROCEDURE Y CURSORES PARA PELÍCULAS
-delimiter //
-CREATE PROCEDURE film_language()
-BEGIN
-  DECLARE ids int;
-  DECLARE done INT DEFAULT FALSE;
-  DECLARE cursor1 CURSOR FOR SELECT film_id FROM film;
-  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+DELIMITER $$
+CREATE PROCEDURE update_languages()
+  BEGIN
+    DECLARE ids int;
+    DECLARE done int DEFAULT FALSE;
+    DECLARE cursor1 CURSOR FOR SELECT film_id FROM film;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
 
-  OPEN cursor1;
-  read_loop: LOOP
-    IF done THEN
-      LEAVE read_loop;
-    END IF;
-		
-    FETCH cursor1 INTO ids;
-    UPDATE film as a JOIN film_category as b ON a.film_id = b.film_id JOIN category as c on b.category_id = c.category_id JOIN language 
-	    SET 
-            SET title = concat(c.name,"_",title) WHERE a.film_id = ids;
+    OPEN cursor1;
+    read_loop: LOOP
+      FETCH cursor1 INTO ids;
+      IF done THEN
+        LEAVE read_loop;
+      END IF;
+
+      IF (SELECT category_id FROM film_category WHERE film_id = ids) = 6 THEN
+        # Documentary(6) then italian(2)
+        UPDATE film SET original_language_id=2 WHERE film_id = ids;
+      ELSEIF (SELECT category_id FROM film_category WHERE film_id = ids) = 9 THEN
+        # Foreign(9) then japanese(3)
+        UPDATE film SET original_language_id=3 WHERE film_id = ids;
+      ELSEIF (SELECT COUNT(*) FROM film_actor WHERE film_id = ids AND actor_id=31) = 1 THEN
+        # SOBIESKI(31) then german(6)
+        UPDATE film SET original_language_id=6 WHERE film_id = ids;
+      ELSEIF (SELECT COUNT(*) FROM film_actor WHERE film_id = ids AND actor_id=3) = 1 THEN
+        # ED CHASE(3) then mandarin(4)
+        UPDATE film SET original_language_id=4 WHERE film_id = ids;
+      ELSEIF (SELECT COUNT(*) FROM film_actor WHERE film_id = ids AND actor_id=34) = 1 THEN
+        # AUDREY OLIVIER(34) then french(5)
+        UPDATE film SET original_language_id=5 WHERE film_id = ids;
+      ELSE
+        # Else english then 1
+        UPDATE film SET original_language_id=1 WHERE film_id = ids;
+      END IF;
     END LOOP;
     CLOSE cursor1;
-END//
-delimiter;
+  END $$
+DELIMITER ;
 
+CALL update_languages();
 
 
 
