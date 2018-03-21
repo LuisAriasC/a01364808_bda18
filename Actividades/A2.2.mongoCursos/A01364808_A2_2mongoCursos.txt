@@ -1,0 +1,71 @@
+db.createCollection("escuela")
+
+db.escuela.insert({Titulo:"Bases Avanzadas", Profesor:[{Nombre:"Ariel", Matricula:"L001010101", Direccion:"CDMX", Genero:"Masculino", Cursos:[{Titulo:"AyMSS", Ano:2018}, {Titulo:"Bases Avanzadas", Ano:2018}]}], Ano:2018})
+
+db.escuela.update({Titulo:"Bases Avanzadas"}, {$set:{EvalEsc:[{Teoricas: 10, Practicas: 10}]}})
+
+db.escuela.update({Titulo:"Bases Avanzadas"}, {$set:{Alumnos:[{Nombre:"Luis Arias", Matricula:"A01364808", Direccion:"Toluca", Genero:"Masculino", Cursos:[{Nombre:"Bases Avanzadas", Ano:2018, CalidficacionesEval:[{Curso:1, Calf: 100},{Curso:1, Calf:80},{Curso:3, Calf:99},{Curso:4, Calf:95}]}],CalfFin:93.5, CalfProf:95}]}})
+
+{
+	"_id" : ObjectId("5aa9e933978bd8747ec08c48"),
+	"Titulo" : "Bases Avanzadas",
+	"Profesor" : [
+		{
+			"Nombre" : "Ariel",
+			"Matricula" : "L001010101",
+			"Direccion" : "CDMX",
+			"Genero" : "Masculino",
+			"Cursos" : [
+				{
+					"Titulo" : "AyMSS",
+					"Ano" : 2018
+				},
+				{
+					"Titulo" : "Bases Avanzadas",
+					"Ano" : 2018
+				}
+			]
+		}
+	],
+	"Ano" : 2018,
+	"EvalEsc" : [
+		{
+			"Teoricas" : 10,
+			"Practicas" : 10
+		}
+	],
+	"Alumnos" : [
+		{
+			"Nombre" : "Luis Arias",
+			"Matricula" : "A01364808",
+			"Direccion" : "CDMX",
+			"Genero" : "Masculino",
+			"Cursos" : [
+				{
+					"Nombre" : "Bases Avanzadas",
+					"Ano" : 2018,
+					"CalidficacionesEval" : [
+						{
+							"Curso" : 1,
+							"Calf" : 100
+						},
+						{
+							"Curso" : 1,
+							"Calf" : 80
+						},
+						{
+							"Curso" : 3,
+							"Calf" : 99
+						},
+						{
+							"Curso" : 4,
+							"Calf" : 95
+						}
+					]
+				}
+			],
+			"CalfFin" : 93.5,
+			"CalfProf" : 95
+		}
+	]
+}
