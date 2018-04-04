@@ -1,0 +1,12 @@
+PREGUNTA 1
+db.grades.aggregate({$group: {_id: '$student_id'}},{$group: {_id: 1,count: {$sum: 1}}})
+
+PREGUNTA 2
+db.grades.aggregate({$group: {_id: '$class_id'}},{$group: {_id: 1,count: {$sum: 1}}})
+
+
+PREGUNTA 3
+var mapCalifs = function(){this.scores.forEach((value)=>{emit(this.student_id, value.score)});};
+var reduceCalifs = function(name, value){var n = Array.avg(value); return n;};
+db.grades.mapReduce(mapCalifs,reduceCalifs,{out:"resCalis"})
+db.resCalis.find()
