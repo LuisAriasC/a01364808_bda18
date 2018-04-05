@@ -21,15 +21,14 @@ db.resCalif.find()
 var mapCalif = function(){this.scores.forEach((value)=>{emit({student:this.student_id,class_id:this.class_id}, value.score)});};
 var reduceCalif = function(name, value){var n = Array.avg(value); return n;};
 db.grades.mapReduce(mapCalif,reduceCalif,{out:"resCalif"})
-db.resCalif.find()
-
+//db.resCalif.find()
+db.resCalif.find().sort({value: 1}).limit(1)
 
 //Pregunta 5
-db.resCalif.find().sort({value: 0}).limit(1)
-
+db.grades.aggregate({$project: { class_id: '$class_id',count: { $size:"$scores"}}},{$sort:{count: -1}}, {$limit : 1})
 
 //Pregunta 6
-db.grades.aggregate([{ $group: { _id: "$student_id", total: { $sum: 1 } } },{ $sort: { total: -1 }}, {$limit: 1}]);
+db.grades.aggregate([{ $group: { _id: "$student_id", total_clases: { $sum: 1 } } },{ $sort: { total_clases: -1 }}, {$limit: 1}]);
 
 
 //Pregunta 7
