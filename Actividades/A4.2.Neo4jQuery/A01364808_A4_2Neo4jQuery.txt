@@ -1,0 +1,62 @@
+Luis Carlos Arias Camacho | A01364808
+
+
+
+1. ¿Cuántos actores hay?
+ 
+MATCH (p:Person)-[r:ACTED_IN]->() RETURN p
+	-Hay 204 actores
+
+
+
+2. ¿cuántos productores hay? 
+
+MATCH (p:Person)-[r:PRODUCED]->() RETURN p
+	-Hay 16 productores
+
+
+
+3. ¿cuántos directores hay? 
+
+MATCH (p:Person)-[r:DIRECTED]->() RETURN p
+	-Hay 56 directores
+
+
+
+
+4. ¿cuántas películas hay?
+
+MATCH (m: Movie) RETURN count(m)
+	-Hay 76 peliculas
+
+
+
+5. ¿Quién ha escrito más películas?
+
+MATCH (p:Person)-[r:WROTE]->() RETURN p, count(r) ORDER BY count(r) DESC
+	-Lana y Lilly Wachowski
+
+
+
+6. El top 5 de películas con el mejor rating:
+
+MATCH ()-[r:REVIEWED]->(m:Movie) RETURN m, avg(r.rating) AS ratings ORDER BY ratings DESC
+	- Cloud Atlas
+	- Jerry Maguire
+	- Unforgiven
+	- The Replacements
+	- The Da Vinci Code
+
+
+
+7. ¿Qué personas debería conocer Al Pacino para que le presentaran a Audrey Tautou?
+
+MATCH p = shortestPath((al:Person{name:"Al Pacino"})-[*]-(audrey:Person{name:"Audrey Tautou"})) WITH nodes(p) AS nodes UNWIND nodes AS n WITH n WHERE "Person" IN labels(n) AND n.name <> "Audrey Tautou" AND n.name <> "Al Pacino" RETURN n
+	-A Keanu Reeves y a James Thompson
+
+
+
+8. ¿Qué actores que han producido y actuado en la misma película?
+
+MATCH (p:Person)-[r:ACTED_IN]->(m:Movie)<-[r2:PRODUCED]-(p) RETURN p
+	-Ni uno solo

@@ -1,0 +1,36 @@
+Luis Carlos Arias Camacho | A01364808
+
+
+1.Restaurantes por ZipCode
+var mapResZip = function() { emit(this.address.zipcode, 1);};
+var reduceResZip = function(zipcode, values) { return Array.sum(values);};
+db.restaurants.mapReduce( mapResZip, reduceResZip, {out:"numResPerZipCode"})
+
+
+2.Grades por usuario
+var mapGradesUser = function() { emit(this.name, this.grades.length);};
+var reduceGradesUser = function(names, length) {return length[0];};
+db.restaurants.mapReduce(mapGradesUser,reduceGradesUser,{out:"gradesUser"})
+
+
+3.Total de scores por usuario
+var mapScoresUser = function() {this.grades.forEach((value)=>{emit(this.name, value.score);});};
+var reduceScoresUser = function(name, scores) {return Array.sum(scores);};
+db.restaurants.mapReduce(mapScoresUser,reduceScoresUser,{out:"scoresUser"})
+
+
+4.Cuántos restaurantes obtuvieron el grade A, Grade B y Grade C
+var mapRestauranGrades = function() {if(this.grades.find(grade => grade.grade === 'A')) {emit('A', 1);}
+  				     if(this.grades.find(grade => grade.grade === 'B')) {emit('B', 1);}
+  				     if(this.grades.find(grade => grade.grade === 'C')) {emit('C', 1);}};
+var reduceRestaurantGrades = function(key, value) {return Array.sum(value);};
+db.restaurants.mapReduce(mapRestaurantGrades,reduceRestaurantGrades,{out:"restaurantGrades"})
+
+
+5. Agrupar restaurantes por “cuisine” y contar restaurantes por categoría
+var mapCategories = function() {emit(this.cuisine, 1);};
+var reduceCategories = function(category, count) {return Array.sum(count);};
+db.restaurants.mapReduce(mapCategories,reduceCategories,{out:"restaurantsCategory"})
+
+
+6. Cuáles son los 10 restaurantes más cercanos a: Restaurant_id: 40360045
