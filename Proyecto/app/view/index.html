@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" ng-app="neo4jExample">
+<head>
+  <meta charset="UTF-8">
+  <title>Neo4j example</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- libs -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+  <!-- AngularJS example application -->
+  <script>
+    angular
+      .module('neo4jExample', [])
+      .controller('MainCtrl', function ($scope, $http) {
+        $scope.nodes = [];
+
+        $scope.show = function () {
+          $http.get('/persons').then(function (resp) {
+            $scope.nodes = resp.data;
+          });
+        };
+
+        $scope.show2 = function () {
+          $http.get('/almacenes').then(function (resp) {
+            $scope.nodes = resp.data;
+          });
+        };
+
+        $scope.load = function () {
+          return $http.get('/tools/load').then(function (resp) {
+            $scope.show();
+            return resp;
+          });
+        };
+
+        $scope.drop = function () {
+          $http.get('/tools/drop').then(function () {
+            $scope.nodes = [];
+          });
+        };
+
+        $scope.create = function(){
+          $http.get('/tools/create').then(function(){
+            $scope.show2();
+            return resp;
+          });
+        };
+
+        $scope.show();
+      });
+  </script>
+
+</head>
+
+<body ng-controller="MainCtrl">
+
+<div class="container">
+  <h3 class="page-header">Registrar Materia Prima</h3>
+  <div clas="form-group">
+    <label>Nombre</label>
+    <input type="text"[(ngModel)]="nombreI" name="nombreI" class="from-control">
+  </div>
+  <div clas="form-group">
+    <label>Cantidad (Kg/lT/Tazas/Cucharadas)</label>
+    <input type="number"[(ngModel)]="cantidad" name="cantidad" class="from-control">
+  </div>
+</div>
+
+<div class="container">
+  <h3 class="page-header">Registrar Producto</h3>
+  <div clas="form-group">
+    <label>Nombre</label>
+    <input type="text"[(ngModel)]="nombreP" name="nombreP" class="from-control">
+  </div>
+  <div clas="form-group">
+    <label>Ingrediente 1</label>
+    <input type="text"[(ngModel)]="ingrediente" name="ingrediente" class="from-control">
+    <label>Cantidad (Kg/lT/Tazas/Cucharadas)</label>
+    <input type="number"[(ngModel)]="cantidad1" name="cantidad1" class="from-control">
+  </div>
+  <div clas="form-group">
+    <label>Ingrediente 2</label>
+    <input type="text"[(ngModel)]="ingrediente2" name="ingrediente2" class="from-control">
+    <label>Cantidad (Kg/lT/Tazas/Cucharadas)</label>
+    <input type="number"[(ngModel)]="cantidad2" name="cantidad2" class="from-control">
+  </div>
+
+</div>
+
+<div class="container">
+  <h3 class="page-header">Registrar Receta</h3>
+  <div clas="form-group">
+    <label>Nombre</label>
+    <input type="text"[(ngModel)]="nombre" name="nombre" class="from-control">
+  </div>
+  <div clas="form-group">
+    <label>Ingrediente 1</label>
+    <input type="text"[(ngModel)]="ing1" name="ing1" class="from-control">
+    <label>Cantidad (Kg/lT/Tazas/Cucharadas)</label>
+    <input type="number"[(ngModel)]="c1" name="c1" class="from-control">
+  </div>
+  <div clas="form-group">
+    <label>Ingrediente 2</label>
+    <input type="text"[(ngModel)]="ing2" name="ing2" class="from-control">
+    <label>Cantidad (Kg/lT/Tazas/Cucharadas)</label>
+    <input type="number"[(ngModel)]="c2" name="c2" class="from-control">
+  </div>
+  <a class="btn btn-default" ng-click="addREC(nombre, ing1, c1, ing2, c2)" role="button">add</a>
+</div>
+
+
+
+</body>
+</html>
